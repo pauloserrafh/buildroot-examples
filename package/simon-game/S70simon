@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Start Simon Game
+#
+
+start() {
+        printf "Starting SIMON: "
+        if python /usr/local/bin/simon-game-1.0/simon.py &
+        then
+          echo $! > /tmp/simon.pid
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
+}
+
+stop() {
+        PPID=`cat /tmp/simon.pid`
+        printf "Stopping SIMON: "
+        if kill -15 $PPID
+        then
+          rm /tmp/simon.pid
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
+}
+
+restart() {
+        stop
+        start
+}
+
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?

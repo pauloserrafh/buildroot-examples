@@ -1,0 +1,8 @@
+config BR2_PACKAGE_SIMON_GAME
+	bool "simon-game"
+	select BR2_USE_WCHAR
+	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
+	select BR2_PACKAGE_PYTHON3
+	select BR2_PACKAGE_PYTHON_RPI_GPIO
+	help
+	  TODO
