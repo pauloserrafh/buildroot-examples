@@ -3,13 +3,15 @@
 [EN]
 This projects aims to provide examples for adding your project to buildroot, inside and outside the tree, using qemu.
 [Instructions in english](README.md)
+
 **NOTE:** This should be always up to date. All the changes must be reflected AT LEAST on this README and on as many of the other languages as possible.
 Always update the hash/tag on README when making changes.
 
 [BR]
 Esse projeto provê exemplos para adicionar seus projetos ao buildroot, tanto modificando diretamente a árvore do buildroot quanto fora dela, utilizando o qemu como plataforma.
 [Instruções em português](README.pt-br.md)
-**NOTA:** As instruções em BR podem estar desatualizadas. A página em EN deve ser a referência oficial. Verifique o hash/tag que o README aponta.
+
+**NOTA:** As instruções em BR podem estar desatualizadas. [A página em EN](README.md) deve ser a referência oficial. Verifique o hash/tag que o README aponta.
 Sempre que forem feitas mudanças, atualize o hash/tag caso o README também tenha sido atualizado.
 
 
@@ -35,7 +37,7 @@ OR
 git clone https://github.com/buildroot/buildroot.git buildroot
 ```
 
-1. It is recommended to use the LTS version, rather than the most recent version as it may be unstable (check the [LTS at the time](https://buildroot.org/download.html)):
+2. It is recommended to use the LTS version, rather than the most recent version as it may be unstable (check the [LTS at the time](https://buildroot.org/download.html)):
 ```bash
 cd buildroot
 
@@ -50,28 +52,28 @@ cd -
 cp -r package/simon-game/ buildroot/package/
 ```
 
-1. Move into the `buildroot/` directory:
+2. Move into the `buildroot/` directory:
 ```bash
 cd buildroot
 ```
 
-1. Edit the file `package/Config.in`, adding `source "package/simon-game/Config.in"` under the `menu "Games"` list.
+3. Edit the file `package/Config.in`, adding `source "package/simon-game/Config.in"` under the `menu "Games"` list.
 
-1. Create the base configurations:
+4. Create the base configurations:
 ```bash
 make qemu_x86_64_defconfig
 ```
 
-1. Open the interactive menu to configure the custom options:
+5. Open the interactive menu to configure the custom options:
 ```bash
 make menuconfig
 ```
 
-   1. Add the `simon-game` package, navigate to `Target packages > Games` and select `simon-game`.
+  1. Add the `simon-game` package, navigate to `Target packages > Games` and select `simon-game`.
 
-   3.  Set the image size by moving back to the inicial page (press esc twice to go back one page) and entering `Filesystem images > exact size` and set to `120M`.
+  2. Set the image size by moving back to the inicial page (press esc twice to go back one page) and entering `Filesystem images > exact size` and set to `120M`.
 
-1. Build the distribution
+6. Build the distribution
 ```bash
 make
 ```
