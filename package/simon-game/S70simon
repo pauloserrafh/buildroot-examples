@@ -5,7 +5,7 @@
 
 start() {
         printf "Starting SIMON: "
-        if python /usr/local/bin/simon-game-1.0/simon.py &
+        if python /usr/local/bin/simon-game-1.0.1/simon.py &
         then
           echo $! > /tmp/simon.pid
           echo "OK"
