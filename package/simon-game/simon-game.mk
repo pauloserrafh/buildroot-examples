@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SIMON_GAME_VERSION = 1.0
+SIMON_GAME_VERSION = 1.0.1
 SIMON_GAME_SITE = https://github.com/pauloserrafh/simon_python
 SIMON_GAME_SITE_METHOD = git
 SIMON_GAME_DEPENDENCIES = python-rpi-gpio
