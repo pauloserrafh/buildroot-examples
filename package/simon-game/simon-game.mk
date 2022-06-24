@@ -15,9 +15,12 @@ define SIMON_GAME_INSTALL_TARGET_CMDS
 	cp -R $(@D) $(TARGET_DIR)/usr/local/bin/
 endef
 
-define SIMON_GAME_INSTALL_INIT_SCRIPT
-	$(INSTALL) -D -m 0755 $(SIMON_GAME_PKGDIR)/S70simon $(TARGET_DIR)/etc/init.d/
-endef
+# Uncomment this install script to start automatically the game.
+# When running on qemu, it causes an error of EOF on python, so
+# it is recommended to use only for RPi mode
+# define SIMON_GAME_INSTALL_INIT_SCRIPT
+# 	$(INSTALL) -D -m 0755 $(SIMON_GAME_PKGDIR)/S70simon $(TARGET_DIR)/etc/init.d/
+# endef
 
 SIMON_GAME_POST_INSTALL_TARGET_HOOKS += SIMON_GAME_INSTALL_INIT_SCRIPT
 
