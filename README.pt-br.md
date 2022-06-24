@@ -95,6 +95,17 @@ A imagem provê um script em bash para executar o `qemu`:
 ./output/images/start-qemu.sh
 ```
 
+Ao iniciar o `qemu`, o ambiente será carregado e uma tela de login apresentada. O usuário padrão é `root` e não é necessário senha.
+```
+Welcome to Buildroot
+buildroot login:
+```
+
+Inicie o jogo. Ele está localizado em `/usr/local/bin/simon-game-<PACKAGE_VERSION>/simon.py`.
+```
+# python /usr/local/bin/simon-game-1.0.1/simon.py
+```
+
 ## Usando um pen-drive USB
 Caso algum outro `defconfig` tenha sido utilizado, i.e, uma placa diferente foi o *build target*, um arquivo `.iso` será gerado e pode ser copiado para o dispositivo utilizando `dd`.
 

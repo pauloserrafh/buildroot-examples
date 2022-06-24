@@ -96,6 +96,17 @@ The image already provides a bash script to run `qemu`:
 ./output/images/start-qemu.sh
 ```
 
+Once `qemu` starts, it will load the environment and prompt to a login screen. The default login is `root` and no password is required.
+```
+Welcome to Buildroot
+buildroot login:
+```
+
+Start the game. It is located on `/usr/local/bin/simon-game-<PACKAGE_VERSION>/simon.py`.
+```
+# python /usr/local/bin/simon-game-1.0.1/simon.py
+```
+
 ## Using USB flash drive
 
 If some other `defconfig` was used, i.e., a different board was the build target, a `.iso` file will be generated and can be copied to the device using `dd`.
