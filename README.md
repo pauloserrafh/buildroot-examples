@@ -1,7 +1,7 @@
 # buildroot-examples
 
 [EN]
-This projects aims to provide examples for adding your project to buildroot, inside and outside the tree, using qemu.
+This projects aims to provide examples for building your project with Buildroot, adding custom packages inside and outside Buildroot's tree. For test purposes, `qemu` is used as the build target.
 [Instructions in english](README.md)
 
 **NOTE:** This should be always up to date. All the changes must be reflected AT LEAST on this README and on as many of the other languages as possible.
@@ -19,7 +19,9 @@ Sempre que forem feitas mudanças, atualize o hash/tag caso o README também ten
 - [buildroot-examples](#buildroot-examples)
 - [Table of Contents](#table-of-contents)
 - [Setup environment](#setup-environment)
-- [Building on buildroot's tree](#building-on-buildroots-tree)
+- [Build](#build)
+  - [Build with packge inside Buildroot's tree](#build-with-packge-inside-buildroots-tree)
+  - [Build with package outside Buildroot's tree](#build-with-package-outside-buildroots-tree)
 - [Run/Flash image](#runflash-image)
   - [qemu](#qemu)
   - [Using USB flash drive](#using-usb-flash-drive)
@@ -46,25 +48,34 @@ git checkout 2021.02.3 -b simon_game_buildroot
 cd -
 ```
 
-# Building on buildroot's tree
-1. Copy the directory `package/simon-game/` into `buildroot/package`:
+# Build
+There are two approaches one can use when building a Linux system with Buildroot. [Its manual](https://buildroot.org/downloads/manual/manual.html#customize-dir-structure) makes it clear that both options are valid and it is up to the user to chose the one which suits better its needs.
+
+Both approaches assume the current directory is the root directory for this repository and [setup](#setup-environment) was done as described on previous step.
+
+- [Building with package inside Buildroot's tree](#build-with-packge-inside-buildroots-tree) is (IMO) the simplest form of adding a custom package to be compiled with Buildroot. This means cloning, copying or downloading Buildroot's source code and change its content to add the desired package, opposed to what is done when [building using a package from outside BR's tree](#build-with-package-outside-buildroots-tree).
+
+- [Building using a package outside Buildroot's tree](#build-with-package-outside-buildroots-tree) means to have a custom package added to buildroot but do not need to change any folder inside Buildroot source itself, as opposed to what is done when [building with a custom package inside BR's tree](#build-with-packge-inside-buildroots-tree). This method is presented on [Buildroot's manual section 9.2](https://buildroot.org/downloads/manual/manual.html#outside-br-custom).
+
+## Build with packge inside Buildroot's tree
+1. Copy the directory `package/simon-game/` into `buildroot/package`.
 ```bash
 cp -r package/simon-game/ buildroot/package/
 ```
 
-2. Move into the `buildroot/` directory:
+2. Move into the `buildroot/` directory.
 ```bash
 cd buildroot
 ```
 
 3. Edit the file `package/Config.in`, adding `source "package/simon-game/Config.in"` under the `menu "Games"` list.
 
-4. Create the base configurations:
+4. Create the base configuration for qemu.
 ```bash
 make qemu_x86_64_defconfig
 ```
 
-5. Open the interactive menu to configure the custom options:
+5. Open the interactive menu to configure the custom options.
 ```bash
 make menuconfig
 ```
@@ -73,7 +84,33 @@ make menuconfig
 
   2. Set the image size by moving back to the inicial page (press esc twice to go back one page) and entering `Filesystem images > exact size` and set to `120M`.
 
-6. Build the distribution
+6. Build the distribution.
+```bash
+make
+```
+The build process takes some time (a few hours), once it is done check the [Run/Flash imagee](#runflash-image) section.
+
+## Build with package outside Buildroot's tree
+1. Move into the `buildroot/` directory.
+```bash
+cd buildroot
+```
+
+2. Create the base configuration for qemu.
+```bash
+make qemu_x86_64_defconfig
+```
+
+3. Open the interactive menu to configure the custom options with the flag `BR2_EXTERNAL` pointing to the path where the external package files are located. In this example, they are located one level above `buildroot/`.
+**IMPORTANT:** If using different paths than [setup](#setup-environment), update `Config.in`, `external.mk` files and the `BR2_EXTERNAL` flag on below command as appropriate.
+```bash
+make BR2_EXTERNAL=.. menuconfig
+```
+  1. Add the `simon-game` package, navigate to `Target packages > Games` and select `simon-game`.
+
+  2. Set the image size by moving back to the inicial page (press esc twice to go back one page) and entering `Filesystem images > exact size` and set to `120M`.
+
+4. Build the distribution.
 ```bash
 make
 ```

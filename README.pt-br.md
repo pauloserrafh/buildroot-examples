@@ -18,7 +18,9 @@ Always update the hash/tag on README when making changes.
 - [buildroot-examples](#buildroot-examples)
 - [Índice](#índice)
 - [Configuração do ambiente](#configuração-do-ambiente)
-- [Fazendo o build dentro da árvore do buildroot](#fazendo-o-build-dentro-da-árvore-do-buildroot)
+- [Build](#build)
+  - [Fazer build adicionando pacote à árvore do buildroot](#fazer-build-adicionando-pacote-à-árvore-do-buildroot)
+  - [Fazer o build utilizando pacote fora da árvore do Buildroot](#fazer-o-build-utilizando-pacote-fora-da-árvore-do-buildroot)
 - [Execute/Grave a imagem](#executegrave-a-imagem)
   - [qemu](#qemu)
   - [Usando um pen-drive USB](#usando-um-pen-drive-usb)
@@ -44,26 +46,34 @@ git checkout 2021.02.3 -b simon_game_buildroot
 
 cd -
 ```
+# Build
+Existem duas abordagens possíveis quando criando um sistema Linux usando Buildroot. [O manual](https://buildroot.org/downloads/manual/manual.html#customize-dir-structure) deixa claro que ambas opções são válidas e que cada usuário deve escolher a que melhor atenda às suas necessidades.
 
-# Fazendo o build dentro da árvore do buildroot
-1. Copie o diretório `package/simon-game/` para `buildroot/package`:
+Ambas abordagens assumem que o diretório atual é a raiz desse repositório e que a [configuração do ambiente](#configuração-do-ambiente) foi feita como descrito no passo anterior.
+
+- [Fazer build adicionando pacote à árvore do buildroot](#fazer-build-adicionando-pacote-à-árvore-do-buildroot) é (na minha opinião) a forma mais simples de adicionar um pacote customizado para ser compilado usando o Buildroot. Essa abordagem se baseia em clonar, copiar ou baixar o código disponibilizado no repositório do Buildroot e alterar a lista de pacotes, adicionando o customizado, oposto ao que é feito quando se faz [build com pacotes fora da árvore do Buildroot](#fazer-o-build-utilizando-pacote-fora-da-árvore-do-buildroot).
+
+- [Fazer o build utilizando pacote fora da árvore do Buildroot]((#fazer-o-build-utilizando-pacote-fora-da-árvore-do-buildroot)) significa adicionar um pacote customizado sem alterar nenhum conteúdo do repositório do Buildroot, em contrapartida ao que é feito quando se [adiciona pacotes à árvore do Buildroot](#fazer-build-adicionando-pacote-à-árvore-do-buildroot). Esse método é apresentado no [manual do Buildroot, seção 9.2](https://buildroot.org/downloads/manual/manual.html#outside-br-custom)
+
+## Fazer build adicionando pacote à árvore do buildroot
+1. Copie o diretório `package/simon-game/` para `buildroot/package`.
 ```bash
 cp -r package/simon-game/ buildroot/package/
 ```
 
-2. Entre no diretório `buildroot/`:
+2. Entre no diretório `buildroot/`.
 ```bash
 cd buildroot
 ```
 
 3. Edite o arquivo `package/Config.in`, adicionando `source "package/simon-game/Config.in"` na lista `menu "Games"`.
 
-4. Crie o arquivo de configuração base:
+4. Crie o arquivo de configuração base.
 ```bash
 make qemu_x86_64_defconfig
 ```
 
-5. Abra o menu interativo para configurar as opções customizadas:
+5. Abra o menu interativo para configurar as opções customizadas.
 ```bash
 make menuconfig
 ```
@@ -72,7 +82,33 @@ make menuconfig
 
    2. Para definir o tamanho da imagem, retorne à página inicial (pressione `esc` duas vezes para voltar uma página), navegue para `Filesystem images > exact size` e configure para `120M`.
 
-6. Faça build da distribuição
+6. Faça build da distribuição.
+```bash
+make
+```
+O processo de build leva algum tempo (algumas horas), quando finalizado siga para a seção [Execute/Grave a imagem](#executegrave-a-imagem).
+
+## Fazer o build utilizando pacote fora da árvore do Buildroot
+1. Entre no diretório `buildroot/`.
+```bash
+cd buildroot
+```
+
+2. Crie o arquivo de configuração base.
+```bash
+make qemu_x86_64_defconfig
+```
+
+3. Abra o menu interativo para configurar as opções customizadas, adicionando a opção `BR2_EXTERNAL` que aponta para o caminho para o pacote externo. Nesse exemplo, os arquivos estão localizados um nível acima de `buildroot/`.
+**IMPORTANTE:** Caso estejam sendo usados caminhos diferentes dos mostrados na seção de [configuração do ambiente](#configuração-do-ambiente), é preciso atualizar corretamente os arquivos `Config.in`, `external.mk`, além do caminho da opção `BR2_EXTERNAL` usada no comando abaixo.
+```bash
+make BR2_EXTERNAL=.. menuconfig
+```
+   1. Para adicionar o pacote `simon-game`, navegue para `Target packages > Games` e selecione `simon-game`.
+
+   2. Para definir o tamanho da imagem, retorne à página inicial (pressione `esc` duas vezes para voltar uma página), navegue para `Filesystem images > exact size` e configure para `120M`.
+
+4. Faça build da distribuição.
 ```bash
 make
 ```
